@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    git credentialsId: 'sopra', url: 'https://github.com/FuturDev22/test_devops_facebook.git', branch: 'main'
+                    git credentialsId: 'sopra', url: 'https://github.com/FuturDev22/test_devops.git', branch: 'main'
                 }
             }
         }
