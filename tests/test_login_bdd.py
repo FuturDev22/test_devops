@@ -36,11 +36,11 @@ def enter_credentials(driver):
 def connexion_click(driver):
     submit_button_locator = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[name='login']")))
     submit_button_locator.click()
-
+    time.sleep(3)
 @then("l\'utilisateur devrait voir un message d\'erreur")
 @allure.step("l'utilisateur devrait voir un message d'erreur")
 def error_message(driver):
-       WebDriverWait(browser, 40).until(
+       WebDriverWait(driver, 60).until(
         EC.visibility_of_element_located((By.XPATH, "//html[@id='facebook']//div[@id='loginform']//div[@class='_9ay7'][contains(text(), 'The password you’ve entered is incorrect.')]"))
     )
 
