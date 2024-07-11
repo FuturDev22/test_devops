@@ -13,13 +13,13 @@ scenarios('../features/login_facebook.feature')
 
 @allure.feature("Login")
 @allure.story("Tester Login pour Facebook")
-@given('l\'utilisateur est sur la page de connexion Facebook')
+@given("l\'utilisateur est sur la page de connexion Facebook")
 @allure.step("l'utilisateur est sur la page de connexion Facebook")
 def user_on_login_page(driver):
     driver.get('https://www.facebook.com/')
     time.sleep(2)
 
-@when('l\'utilisateur saisit des informations d'identification non valides')
+@when("l\'utilisateur saisit des informations d\'identification non valides")
 @allure.step("l'utilisateur saisit des informations d'identification non valides")
 def enter_credentials(driver):
     xpath_username = "//html[@id='facebook']//input[@id='email']"
@@ -31,14 +31,14 @@ def enter_credentials(driver):
     password_locator.send_keys("123154")
     time.sleep(2)
 
-@when('l\'utilisateur clique sur le bouton de connexion')
+@when("l\'utilisateur clique sur le bouton de connexion")
 @allure.step("l'utilisateur clique sur le bouton de connexion")
 def connexion_click(driver):
     xpath_submit_button = "//div[@id='root']//form//button[.='Connexion']"
     submit_button_locator = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, xpath_submit_button)))
     submit_button_locator.click()
 
-@then('l\'utilisateur devrait voir un message d'erreur')
+@then("l\'utilisateur devrait voir un message d\'erreur")
 @allure.step("l'utilisateur devrait voir un message d'erreur")
 def error_message(driver):
        WebDriverWait(browser, 40).until(
