@@ -34,8 +34,7 @@ def enter_credentials(driver):
 @when("l\'utilisateur clique sur le bouton de connexion")
 @allure.step("l'utilisateur clique sur le bouton de connexion")
 def connexion_click(driver):
-    xpath_submit_button = "//html[@id='facebook']//div[@id='content']/div/div/div[@class='_5aj7 _m--']//form[@action='/login/?privacy_mutation_token=eyJ0eXBlIjowLCJjcmVhdGlvbl90aW1lIjoxNzIwNzExMzEyLCJjYWxsc2l0ZV9pZCI6MzgxMjI5MDc5NTc1OTQ2fQ%3D%3D&next']//button[@name='login']"
-    submit_button_locator = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, xpath_submit_button)))
+    submit_button_locator = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By..CSS_SELECTOR, "button[name='login']")))
     submit_button_locator.click()
 
 @then("l\'utilisateur devrait voir un message d\'erreur")
