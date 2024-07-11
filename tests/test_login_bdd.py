@@ -41,7 +41,7 @@ def connexion_click(driver):
 @allure.step("l'utilisateur devrait voir un message d'erreur")
 def error_message(driver):
        WebDriverWait(driver, 60).until(
-            EC.visibility_of_element_located((By.XPATH, "//html[@id='facebook']/body/div[3]/div[@role='dialog']//div[@class='_9kq2'][contains(text(), 'Nous n’avons pas trouvé de compte correspondant à ce que vous avez entré, mais nous en avons trouvé un dont la correspondance est proche.')]"))
+            EC.visibility_of_element_located((By.XPATH, "//html[@id='facebook']/body/div[3]/div[@role='dialog']//div[@class='_9kq2'][contains(text(), "We couldn't find an account that matches what you entered, but found one that closely matches.")]"))
     )
 
 
