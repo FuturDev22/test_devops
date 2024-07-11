@@ -14,7 +14,7 @@ scenarios('../features/login.feature')
 @allure.feature("Login")
 @allure.story("Tester Login")
 @given("L\'utilisateur ouvre la page de connexion")
-@allure.step( L'utilisateur ouvre la page de connexion")
+@allure.step("L'utilisateur ouvre la page de connexion")
 def user_open_login_page(driver):
     driver.get("https://practicetestautomation.com/practice-test-login/")
     time.sleep(2)
