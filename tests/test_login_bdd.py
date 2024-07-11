@@ -8,41 +8,50 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-scenarios('../features/login_facebook.feature')
+scenarios('../features/login.feature')
 
 
 @allure.feature("Login")
-@allure.story("Tester Login pour Facebook")
-@given("l\'utilisateur est sur la page de connexion Facebook")
-@allure.step("l'utilisateur est sur la page de connexion Facebook")
-def user_on_login_page(driver):
-    driver.get('https://www.facebook.com/')
+@allure.story("Tester Login")
+@given("L\'utilisateur ouvre la page de connexion")
+@allure.step( L'utilisateur ouvre la page de connexion")
+def user_open_login_page(driver):
+    driver.get("https://practicetestautomation.com/practice-test-login/")
     time.sleep(2)
 
-@when("l\'utilisateur saisit des informations d\'identification non valides")
-@allure.step("l'utilisateur saisit des informations d'identification non valides")
+@when("L\'utilisateur saisit le nom d'utilisateur et le mot de passe")
+@allure.step("L'utilisateur saisit le nom d'utilisateur et le mot de passe")
 def enter_credentials(driver):
-    xpath_username = "//html[@id='facebook']//input[@id='email']"
-    username_locator = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, xpath_username)))
-    username_locator.send_keys("oumaymas@ymail.com")
+    username_locator = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.ID, "username")))
+    username_locator.send_keys("student")
     time.sleep(2)
-    xpath_password = "//html[@id='facebook']//input[@id='pass']"
-    password_locator = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, xpath_password)))
-    password_locator.send_keys("123154")
+    password_locator = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.NAME, "password")))
+    password_locator.send_keys("Password123")
     time.sleep(2)
 
-@when("l\'utilisateur clique sur le bouton de connexion")
-@allure.step("l'utilisateur clique sur le bouton de connexion")
-def connexion_click(driver):
-    submit_button_locator = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[name='login']")))
+@when("L\'utilisateur clique sur submit")
+@allure.step("L'utilisateur clique sur submit")
+def submit_click(driver):
+    submit_button_locator = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH, "//button[@class='btn']")))
     submit_button_locator.click()
-    time.sleep(3)
-@then("l\'utilisateur devrait voir un message d\'erreur")
-@allure.step("l'utilisateur devrait voir un message d'erreur")
-def error_message(driver):
-    xpath_error = "///html[@id='facebook']/body/div[3]/div[@role='dialog']//div[@class='_9kq2']"
-    error_locator = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, xpath_error)))
-    assert "We couldn't find an account that matches what you entered, but found one that closely matches." in error_locator.text
     time.sleep(2)
-
+@then("L\'utilisateur doit voir URL https://practicetestautomation.com/logged-in-successfully/")
+@allure.step("l'utilisateur doit voir URL https://practicetestautomation.com/logged-in-successfully/")
+def voir_url(driver):
+    actual_url = driver.current_url
+    assert actual_url == "https://practicetestautomation.com/logged-in-successfully/"
+    
+@then("L\'utilisateur doit voir le message Logged In Successfully")
+@allure.step("L'utilisateur doit voir le message Logged In Successfully")
+def voir_message(driver):
+    text_locator = driver.find_element(By.TAG_NAME, "h1")
+    actual_text = text_locator.text
+    assert actual_text == "Logged In Successfully"
+    
+@then("L\'utilisateur doit voir le bouton de déconnexion")
+@allure.step("L'utilisateur doit voir le bouton de déconnexion")
+def voir_bouton(driver):
+    log_out_button_locator = driver.find_element(By.LINK_TEXT, "Log out")
+    assert log_out_button_locator.is_displayed()
+    time.sleep(5)
 
