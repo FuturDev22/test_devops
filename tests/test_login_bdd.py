@@ -34,7 +34,7 @@ def enter_credentials(driver):
 @when("l\'utilisateur clique sur le bouton de connexion")
 @allure.step("l'utilisateur clique sur le bouton de connexion")
 def connexion_click(driver):
-    submit_button_locator = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By..CSS_SELECTOR, "button[name='login']")))
+    submit_button_locator = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[name='login']")))
     submit_button_locator.click()
 
 @then("l\'utilisateur devrait voir un message d\'erreur")
