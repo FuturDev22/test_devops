@@ -1,8 +1,11 @@
-Feature: Facebook Login
+Feature: Login
 
-  Scenario: Connexion échouée avec des informations d'identification invalides
-    Given l'utilisateur est sur la page de connexion Facebook
-    When l'utilisateur saisit des informations d'identification non valides
-    And l'utilisateur clique sur le bouton de connexion
-    Then l'utilisateur devrait voir un message d'erreur
+  Scenario: connexion réussie
+    Given L'utilisateur ouvre la page de connexion
+    When L'utilisateur saisit le nom d'utilisateur 
+    And L'utilisateur saisit le mot de passe
+    And L'utilisateur clique sur submit
+    Then L'utilisateur doit voir URL "https://practicetestautomation.com/logged-in-successfully/"
+    And  L'utilisateur doit voir le message "Logged In Successfully"
+    And  L'utilisateur doit voir le bouton de déconnexion
 
