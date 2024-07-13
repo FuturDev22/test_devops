@@ -171,7 +171,7 @@ services:
     user: root
     volumes:
       - /home/context_file.context:/zap/context_file.context:ro 
-      - ./zap/wrk:/zap/wrk
+      - /home/zap/wrk:/zap/wrk
     networks:
       - devops
     command: sh -c "chmod -R 777 /zap/wrk && sleep infinity"
