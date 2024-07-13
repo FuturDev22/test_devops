@@ -13,9 +13,22 @@ pipeline {
         stage('Run Security Tests') {
             steps {
                 script {
-                    sh 'docker run --user root --name zapp -v /var/jenkins_home/workspace/4you_devops_test_bdd_pipeline_3:/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy /bin/sh -c "chmod -R 777 /zap/wrk && zap-baseline.py --autooff -t https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login -r zap_report.html"'
+                    sh 'docker run --user root --name zapp -v /zap/wrk:/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy /bin/sh -c "chmod -R 777 /zap/wrk && zap-baseline.py --autooff -t https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login -r zap_report.html"'
                     sh 'sleep 5'
+                    sh 'docker cp zapp:/zap/wrk/zap_report.html $WORKSPACE'
                 }
+            }
+        }
+        stage('Publish OWASP ZAP Reports') {
+            steps {
+                publishHTML([
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: '.',
+                    reportFiles: 'zap_report.html',
+                    reportName: 'OWASP ZAP Report'
+                ])
             }
         }
         stage('Build Docker Image') {
