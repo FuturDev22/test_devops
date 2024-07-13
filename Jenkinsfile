@@ -34,6 +34,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker exec zap zap-baseline.py --autooff -t https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login -r zap_baseline_report.html'
+                    sh 'docker cp zap:/zap/wrk/zap_baseline_report.html $WORKSPACE'
                 }
             }
         }
