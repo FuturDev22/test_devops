@@ -19,7 +19,7 @@ def driver(request):
         chrome_options.add_argument("--start-maximized")
         try:
             my_driver = webdriver.Remote(
-                command_executor="http://172.19.0.2:30044/wd/hub",
+                command_executor="http://selenium-grid-control-plane:30044/wd/hub",
                 options=chrome_options
             )
         except Exception as e:
@@ -31,7 +31,7 @@ def driver(request):
         edge_options.add_argument("--start-maximized")
         try:
            my_driver = webdriver.Remote(
-                command_executor="http://172.19.0.2:30044/wd/hub",
+                command_executor="http://172.19.0.3:30044/wd/hub",
                 options=edge_options
            )
         except Exception as e:
@@ -42,7 +42,7 @@ def driver(request):
         firefox_options.add_argument("--start-maximized")
         try:
             my_driver = webdriver.Remote(
-                command_executor="http://172.19.0.2:30044/wd/hub",
+                command_executor="http://172.19.0.3:30044/wd/hub",
                 options=firefox_options
             )
         except Exception as e:
