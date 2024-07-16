@@ -41,23 +41,6 @@ pipeline {
             }
         }
 
-
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    def scannerHome = tool 'sonarqube'
-                    withSonarQubeEnv('sonarqube') {
-                        sh "${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=testing \
-                            -Dsonar.sources=./tests \
-                            -Dsonar.host.url=http://sonarqube:9000 \
-                            -Dsonar.login=sqa_421c1c3215045f8c9c84f88166be7aae228e13b8 \
-                            -Dsonar.python.coverage.reportPaths=coverage.xml"
-                    }
-                }
-            }
-        }
-        
         stage('Generate Allure Report') {
             steps {
                 script {
