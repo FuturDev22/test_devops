@@ -35,8 +35,8 @@ pipeline {
                 script {
                     sh 'docker exec selenium-pytest-container-bdd-qa /bin/bash -c "source venv/bin/activate && coverage run -m pytest --browser edge ./tests/test_login_bdd.py --alluredir allure-results && coverage xml -o coverage.xml" | tee edge_tests.log'
                     sh 'docker cp selenium-pytest-container-bdd-qa:/app/coverage.xml /var/jenkins_home/workspace/4you_devops_test_bdd_pipeline_3'
-                    sh'sleep 10'
-                    sh 'docker-compose stop edge-video && docker-compose rm -f edge-video'
+                    // sh'sleep 10'
+                    // sh 'docker-compose stop edge-video && docker-compose rm -f edge-video'
                 }
             }
         }
@@ -46,8 +46,8 @@ pipeline {
             steps {
                 script {
                     sh 'docker exec selenium-pytest-container-bdd-qa /bin/bash -c "source venv/bin/activate && pytest --browser chrome ./tests/test_login_bdd.py --cov --alluredir allure-results" | tee chrome_tests.log'
-                    sh'sleep 10'
-                    sh 'docker-compose stop chrome-video && docker-compose rm -f chrome-video'
+                    // sh'sleep 10'
+                    // sh 'docker-compose stop chrome-video && docker-compose rm -f chrome-video'
                 }
             }
         }
@@ -56,8 +56,8 @@ pipeline {
             steps {
                 script {
                     sh 'docker exec selenium-pytest-container-bdd-qa /bin/bash -c "source venv/bin/activate && pytest --browser firefox ./tests/test_login_bdd.py --cov --alluredir allure-results" | tee firefox_tests.log'
-                    sh'sleep 10'
-                    sh 'docker-compose stop firefox-video && docker-compose rm -f firefox-video'
+                    // sh'sleep 10'
+                    // sh 'docker-compose stop firefox-video && docker-compose rm -f firefox-video'
                 }
             }
         }
