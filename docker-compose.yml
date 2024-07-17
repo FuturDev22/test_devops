@@ -1,10 +1,130 @@
 version: '3'
 services:
+  selenium-hub:
+    image: selenium/hub:4.1.4-20220427
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
+      - "4442:4442"
+      - "4443:4443"
+    networks:
+      - devops
+
+  chrome-node:
+    image: selenium/node-chrome:4.1.4-20220427
+    container_name: chrome-node
+    depends_on:
+      - selenium-hub
+    ports:
+      - "5900:5900"
+    environment:
+      - HUB_HOST=selenium-hub
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - VIDEO=true
+    shm_size: "2gb"
+    volumes:
+      - /var/jenkins2_home:/var/jenkins2_home
+      - /home/videos:/videos
+    networks:
+      - devops
+
+  chrome-video:
+    image: selenium/video:ffmpeg-4.3.1-20220427
+    container_name: chrome-video
+    depends_on:
+      - chrome-node
+    volumes:
+      - /home/videos:/videos
+    environment:
+      - DISPLAY_CONTAINER_NAME=chrome-node
+      - FILE_NAME=chrome_tests_video.mp4 
+    command: ["/opt/bin/entry_point.sh"]
+    networks:
+      - devops
+
+  edge-node:
+    image: selenium/node-edge:4.1.4-20220427
+    container_name: edge-node
+    depends_on:
+      - selenium-hub
+    ports:
+      - "5901:5900"
+    environment:
+      - HUB_HOST=selenium-hub
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - VIDEO=true
+    shm_size: "2gb"
+    volumes:
+      - /var/jenkins2_home:/var/jenkins2_home
+      - /home/videos:/videos
+    networks:
+      - devops
+
+  edge-video:
+    image: selenium/video:ffmpeg-4.3.1-20220427
+    container_name: edge-video
+    depends_on:
+      - edge-node
+    volumes:
+      - /home/videos:/videos
+    environment:
+      - DISPLAY_CONTAINER_NAME=edge-node
+      - FILE_NAME=edge_tests_video.mp4 
+    command: ["/opt/bin/entry_point.sh"]
+    networks:
+      - devops
+
+  firefox-node:
+    image: selenium/node-firefox:4.1.4-20220427
+    container_name: firefox-node
+    depends_on:
+      - selenium-hub
+    ports:
+      - "5902:5900"
+    environment:
+      - HUB_HOST=selenium-hub
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - VIDEO=true
+    shm_size: "2gb"
+    volumes:
+      - /var/jenkins2_home:/var/jenkins2_home
+      - /home/videos:/videos
+    networks:
+      - devops
+
+  firefox-video:
+    image: selenium/video:ffmpeg-4.3.1-20220427
+    container_name: firefox-video
+    depends_on:
+      - firefox-node
+    volumes:
+      - /home/videos:/videos
+    environment:
+      - DISPLAY_CONTAINER_NAME=firefox-node
+      - FILE_NAME=firefox_tests_video.mp4 
+    command: ["/opt/bin/entry_point.sh"]
+    networks:
+      - devops
+
   selenium-pytest-container-qa:
     image: selenium-pytest-project-qa-bdd
     container_name: selenium-pytest-container-bdd-qa
     networks:
       - devops
+    depends_on:
+      - selenium-hub
+      - chrome-node
+      - firefox-node
+      - edge-node
+      - edge-video
+      - firefox-video
+      - chrome-video
       
   sonarqube:
     image: sonarqube:latest
@@ -44,7 +164,6 @@ services:
       - /var/lib/docker:/var/lib/docker:ro     
     networks:
       - devops
-    
 networks:
   devops:
     external: true
