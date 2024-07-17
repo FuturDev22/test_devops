@@ -44,18 +44,38 @@ def driver(request):
         else:
             raise ValueError(f"Unknown browser '{browser}'")
     elif grid == "browserstack":
-        desired_capabilities = {
-            'os': 'Windows',
-            'os_version': '10',
-            'browser': browser,
-            'browser_version': 'latest',
-            'name': 'BrowserStack Test',
-            'build': 'Sample Build'
+        browserstack_options = {
+            "os": "Windows",
+            "osVersion": "10",
+            "projectName": "My Project",
+            "buildName": "Build 1",
+            "sessionName": "Session 1",
+            "local": "false",
+            "seleniumVersion": "4.0.0"
         }
-        my_driver = webdriver.Remote(
-            command_executor='https://souissioumaima_YPT8ly:Fuzgb1pKwpUxisivkjmj@hub-cloud.browserstack.com/wd/hub',
-            desired_capabilities=desired_capabilities
-        )
+        if browser == "chrome":
+            chrome_options = ChromeOptions()
+            chrome_options.set_capability('bstack:options', browserstack_options)
+            my_driver = webdriver.Remote(
+                command_executor='https://souissioumaima_YPT8ly:Fuzgb1pKwpUxisivkjmj@hub-cloud.browserstack.com/wd/hub',
+                options=chrome_options
+            )
+        elif browser == "edge":
+            edge_options = EdgeOptions()
+            edge_options.set_capability('bstack:options', browserstack_options)
+            my_driver = webdriver.Remote(
+                command_executor='https://souissioumaima_YPT8ly:Fuzgb1pKwpUxisivkjmj@hub-cloud.browserstack.com/wd/hub',
+                options=edge_options
+            )
+        elif browser == "firefox":
+            firefox_options = FirefoxOptions()
+            firefox_options.set_capability('bstack:options', browserstack_options)
+            my_driver = webdriver.Remote(
+                command_executor='https://souissioumaima_YPT8ly:Fuzgb1pKwpUxisivkjmj@hub-cloud.browserstack.com/wd/hub',
+                options=firefox_options
+            )
+        else:
+            raise ValueError(f"Unknown browser '{browser}'")
     else:
         raise ValueError(f"Unknown grid '{grid}'")
     
