@@ -126,7 +126,7 @@ services:
       - firefox-video
       - chrome-video
   zap:
-    image: ghcr.io/zaproxy/zaproxy
+    image: ghcr.io/zaproxy/zaproxy:stable
     container_name: owasp-zap
     command: zap.sh -daemon -host 0.0.0.0 -port 8082 -config api.disablekey=true
     ports:
