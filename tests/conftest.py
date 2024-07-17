@@ -10,7 +10,7 @@ def pytest_addoption(parser):
 @pytest.fixture()
 def driver(request):
     browser = request.config.getoption("--browser")
-    zap_proxy = "http://owasp-zap:8080"  # Adresse du proxy OWASP ZAP
+    zap_proxy = "http://owasp-zap:8082"  # Adresse du proxy OWASP ZAP
 
     if browser == "chrome":
         chrome_options = ChromeOptions()
