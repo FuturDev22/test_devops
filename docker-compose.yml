@@ -13,7 +13,6 @@ services:
   chrome-node:
     image: selenium/node-chrome:4.1.4-20220427
     container_name: chrome-node
-    platform: windows/amd64
     depends_on:
       - selenium-hub
     ports:
