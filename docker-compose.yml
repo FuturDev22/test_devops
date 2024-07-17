@@ -128,7 +128,7 @@ services:
   zap:
     image: ghcr.io/zaproxy/zaproxy:stable
     container_name: owasp-zap
-    command: zap.sh -daemon -host 0.0.0.0 -port 8082 -config api.addrs.addr.name=172.18.0.*
+    command: zap.sh -daemon -host 0.0.0.0 -port 8082 -config api.addrs.addr.name=172.18.0.* -config api.disablekey=true
     ports:
       - "8082:8082"
     depends_on:
