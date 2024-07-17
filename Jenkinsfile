@@ -33,7 +33,7 @@ pipeline {
         stage('Run Tests on Edge') {
             steps {
                 script {
-                    sh 'docker exec selenium-pytest-container-bdd-qa /bin/bash -c "source venv/bin/activate && coverage run -m pytest --browser edge ./tests/test_login_bdd.py --alluredir allure-results && coverage xml -o coverage.xml" | tee edge_tests.log'
+                    sh 'docker exec selenium-pytest-container-bdd-qa /bin/bash -c "source venv/bin/activate && coverage run -m pytest --browser edge --use-grid browserstack ./tests/test_login_bdd.py --alluredir allure-results && coverage xml -o coverage.xml" | tee edge_tests.log'
                     sh 'docker cp selenium-pytest-container-bdd-qa:/app/coverage.xml /var/jenkins_home/workspace/4you_devops_test_bdd_pipeline_3'
                     sh'sleep 10'
                     sh 'docker-compose stop edge-video && docker-compose rm -f edge-video'
