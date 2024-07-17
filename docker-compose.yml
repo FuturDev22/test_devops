@@ -133,6 +133,8 @@ services:
       - "8082:8082"
     depends_on:
       - selenium-pytest-container-qa  
+    environment:
+      - ZAP_PORT=8082
     networks:
       - devops
       
