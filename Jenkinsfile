@@ -37,7 +37,7 @@ pipeline {
                     sh 'docker run -dt --name owasp -p 8085:8085 ghcr.io/zaproxy/zaproxy:stable /bin/bash'
                     sh 'docker exec owasp mkdir /zap/wrk'
                     sleep 5
-                    sh 'docker exec owasp zap-full-scan.py --autooff -t https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login -r report.html -I'
+                    sh 'docker exec owasp zap-full-scan.py -t https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login -r report.html -I'
                     sh 'sleep 10'
                     sh 'docker cp owasp:/zap/wrk/report.html ${WORKSPACE}/report.html'
                     
