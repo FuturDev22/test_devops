@@ -29,51 +29,45 @@ pipeline {
                 }
             }
         }
-
-        stage('Security Scan') {
+       
+        stage('Run ZAP') {
             steps {
                 script {
-                    // Lancer un scan via l'API OWASP ZAP
-                    def target_url = 'https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login'
-                    def zap_api_url = "http://owasp_zap:8084/JSON/ascan/action/scan/?url=${target_url}"
-                    def scan_response = sh(script: "curl -s ${zap_api_url}", returnStdout: true).trim()
-
-                    if (scan_response.contains('"code":"OK"')) {
-                        echo "Scan started successfully."
-                    } else {
-                        error "Failed to start scan. Response: ${scan_response}"
-                    }
-
-                    // Attendre que le scan soit terminé
-                    sleep 60
+                    // Run ZAP in daemon mode
+                    sh """
+                    docker run -d --name zap -u zap -p 8084:8084 -i ghcr.io/zaproxy/zaproxy zap.sh -daemon -host 0.0.0.0 -port 8084
+                    """       
+                    // Wait for ZAP to start
+                    sleep 10        
+                    // Run the security scan
+                    sh """
+                    docker exec zap zap-cli quick-scan --self-contained --start-options '-config api.disablekey=true' https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login
+                    """ 
+                    // Generate the report
+                    sh """
+                    docker exec zap zap-cli report -o zap-report.html -f html
+                    """   
+                    // Stop the ZAP container
+                    sh 'docker stop zap && docker rm zap'
                 }
             }
         }
-
-        stage('Generate Report') {
+        
+        stage('Archive Report') {
             steps {
-                script {
-                    // Récupérer le rapport OWASP ZAP
-                    def report_url = 'http://owasp_zap:8084/OTHER/core/other/htmlreport/'
-                    sh "curl -s ${report_url} -o zap_report.html"
-                }
-            }
-        }
-
-        stage('Publish Reports') {
-            steps {
-                // Publier le rapport OWASP ZAP dans Jenkins
+                // Archive the ZAP report in Jenkins
+                archiveArtifacts artifacts: '${ZAP_REPORT}', allowEmptyArchive: true
+                // Publish the report
                 publishHTML(target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
-                    reportDir: '.',
-                    reportFiles: 'zap_report.html',
+                    reportDir: '',
+                    reportFiles: '${ZAP_REPORT}',
                     reportName: 'OWASP ZAP Report'
                 ])
             }
         }
-
         stage('Run Tests on Edge') {
             steps {
                 script {
