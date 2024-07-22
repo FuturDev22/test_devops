@@ -29,6 +29,51 @@ pipeline {
                 }
             }
         }
+
+        stage('Security Scan') {
+            steps {
+                script {
+                    // Lancer un scan via l'API OWASP ZAP
+                    def target_url = 'https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login'
+                    def zap_api_url = "http://localhost:8084/JSON/ascan/action/scan/?url=${target_url}"
+                    def scan_response = sh(script: "curl -s ${zap_api_url}", returnStdout: true).trim()
+
+                    if (scan_response.contains('"code":"OK"')) {
+                        echo "Scan started successfully."
+                    } else {
+                        error "Failed to start scan. Response: ${scan_response}"
+                    }
+
+                    // Attendre que le scan soit terminé
+                    sleep 60
+                }
+            }
+        }
+
+        stage('Generate Report') {
+            steps {
+                script {
+                    // Récupérer le rapport OWASP ZAP
+                    def report_url = 'http://localhost:8084/OTHER/core/other/htmlreport/'
+                    sh "curl -s ${report_url} -o zap_report.html"
+                }
+            }
+        }
+
+        stage('Publish Reports') {
+            steps {
+                // Publier le rapport OWASP ZAP dans Jenkins
+                publishHTML(target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: '.',
+                    reportFiles: 'zap_report.html',
+                    reportName: 'OWASP ZAP Report'
+                ])
+            }
+        }
+    }
         
         stage('Run Tests on Edge') {
             steps {
@@ -59,15 +104,6 @@ pipeline {
                     sh'sleep 10'
                     sh 'docker-compose stop firefox-video && docker-compose rm -f firefox-video'
                 }
-            }
-        }
-
-        stage('Run OWASP ZAP Scan') {
-            steps {
-                script {
-                    sh 'docker exec owasp-zap zap-cli report -o zap_report.html -f html'
-                }
-                archiveArtifacts artifacts: 'zap_report.html', allowEmptyArchive: true
             }
         }
 
