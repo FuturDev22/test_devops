@@ -30,25 +30,14 @@ pipeline {
             }
         }
        
-        stage('Run ZAP') {
+       
+        stage('Run ZAP Baseline Scan') {
             steps {
                 script {
-                    // Run ZAP in daemon mode
+                    // Run ZAP baseline scan on the specified network
                     sh """
-                    docker run -d --name zap -u zap -p 8084:8084 --network devops -i ghcr.io/zaproxy/zaproxy zap.sh -daemon -host 0.0.0.0 -port 8084
-                    """       
-                    // Wait for ZAP to start
-                    sleep 10        
-                    // Run the security scan
-                    sh """
-                    docker exec zap zap-cli quick-scan --self-contained --start-options '-config api.disablekey=true' https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login
-                    """ 
-                    // Generate the report
-                    sh """
-                    docker exec zap zap-cli report -o zap-report.html -f html
-                    """   
-                    // Stop the ZAP container
-                    sh 'docker stop zap && docker rm zap'
+                    docker run --rm --name zap --network devops -v $(pwd):/zap/wrk -u zap -p 8081:8081 -t ghcr.io/zaproxy/zaproxy zap-baseline.py -t https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login -r zap-report.html -d -port 8081
+                    """
                 }
             }
         }
@@ -68,6 +57,7 @@ pipeline {
                 ])
             }
         }
+        
         stage('Run Tests on Edge') {
             steps {
                 script {
