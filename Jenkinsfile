@@ -56,14 +56,14 @@ pipeline {
         stage('Archive Report') {
             steps {
                 // Archive the ZAP report in Jenkins
-                archiveArtifacts artifacts: '${ZAP_REPORT}', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'zap-report.html', allowEmptyArchive: true
                 // Publish the report
                 publishHTML(target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
                     reportDir: '',
-                    reportFiles: '${ZAP_REPORT}',
+                    reportFiles: 'zap-report.html',
                     reportName: 'OWASP ZAP Report'
                 ])
             }
