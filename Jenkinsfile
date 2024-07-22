@@ -35,9 +35,9 @@ pipeline {
             steps {
                 script {
                     sh """
-                    docker run --rm --name zap --network devops -v \$(pwd):/zap/wrk -u zap -p 8081:8081 \
+                    docker run --rm --name zap --network devops -v \$(pwd):/zap/wrk -u zap -p 8083:8083 \
                     -t ghcr.io/zaproxy/zaproxy zap-baseline.py -t https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login \
-                    -r zap-report.html -d -port 8081
+                    -r zap-report.html -d -port 8083
                     """
                 }
             }
