@@ -35,7 +35,7 @@ pipeline {
                 script {
                     // Run ZAP in daemon mode
                     sh """
-                    docker run -d --name zap -u zap -p 8084:8084 -i ghcr.io/zaproxy/zaproxy zap.sh -daemon -host 0.0.0.0 -port 8084
+                    docker run -d --name zap -u zap -p 8084:8084 --network devops -i ghcr.io/zaproxy/zaproxy zap.sh -daemon -host 0.0.0.0 -port 8084
                     """       
                     // Wait for ZAP to start
                     sleep 10        
