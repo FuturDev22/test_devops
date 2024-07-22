@@ -125,19 +125,6 @@ services:
       - edge-video
       - firefox-video
       - chrome-video
-  zap:
-    image: ghcr.io/zaproxy/zaproxy:stable
-    container_name: owasp-zap
-    command: zap.sh -daemon -host 0.0.0.0 -port 8082 -config api.addrs.addr.name=172.18.0.* -config api.disablekey=true
-    ports:
-      - "8082:8082"
-    depends_on:
-      - selenium-pytest-container-qa  
-    environment:
-      - ZAP_PORT=8082
-    networks:
-      - devops
-      
   sonarqube:
     image: sonarqube:latest
     container_name: sonarqube
@@ -183,6 +170,8 @@ services:
     ports:
       - "8084:8084"
     command: zap.sh -daemon -port 8084 -host 0.0.0.0 -config api.disablekey=true
+    environment:
+      - ZAP_PORT=8084
     networks:
       - devops
   
