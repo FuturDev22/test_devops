@@ -164,17 +164,6 @@ services:
     networks:
       - devops
 
-  zap:
-    image: ghcr.io/zaproxy/zaproxy
-    container_name: owasp_zap
-    ports:
-      - "8084:8084"
-    command: zap.sh -daemon -port 8084 -host 0.0.0.0 -config api.disablekey=true
-    environment:
-      - ZAP_PORT=8084
-    networks:
-      - devops
-  
 networks:
   devops:
     external: true
