@@ -34,7 +34,7 @@ pipeline {
         stage('Run ZAP Baseline Scan') {
             steps {
                 script {
-                    sh 'docker run -dt --name owasp -p 8085:8085 ghcr.io/zaproxy/zaproxy /bin/bash'
+                    sh 'docker run -dt --name owasp -p 8085:8085 ghcr.io/zaproxy/zaproxy:stable /bin/bash'
                     sh 'docker exec owasp mkdir /zap/wrk'
                     sleep 5
                     sh 'docker exec owasp zap-baseline.py -t https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login -r report.html -I'
