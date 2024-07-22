@@ -35,7 +35,7 @@ pipeline {
                 script {
                     // Lancer un scan via l'API OWASP ZAP
                     def target_url = 'https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login'
-                    def zap_api_url = "http://localhost:8084/JSON/ascan/action/scan/?url=${target_url}"
+                    def zap_api_url = "http://owasp_zap:8084/JSON/ascan/action/scan/?url=${target_url}"
                     def scan_response = sh(script: "curl -s ${zap_api_url}", returnStdout: true).trim()
 
                     if (scan_response.contains('"code":"OK"')) {
@@ -54,7 +54,7 @@ pipeline {
             steps {
                 script {
                     // Récupérer le rapport OWASP ZAP
-                    def report_url = 'http://localhost:8084/OTHER/core/other/htmlreport/'
+                    def report_url = 'http://owasp_zap:8084/OTHER/core/other/htmlreport/'
                     sh "curl -s ${report_url} -o zap_report.html"
                 }
             }
