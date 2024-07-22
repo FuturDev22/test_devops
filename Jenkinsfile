@@ -34,28 +34,17 @@ pipeline {
         stage('Run ZAP Baseline Scan') {
             steps {
                 script {
-                    sh """
-                    docker run --rm --name zap --network devops -v \$(pwd):/zap/wrk -u zap -p 8083:8083 \
-                    -t ghcr.io/zaproxy/zaproxy zap-baseline.py -t https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login \
-                    -r zap-report.html -d -port 8083
-                    """
+                    sh 'docker run -dt --name owasp owasp/zap2docker-stable /bin/bash'
+                    sh 'docker exec owasp mkdir /zap/wrk'
+                    sleep 5
+                    sh 'docker exec owasp zap-baseline.py -t https://tnhldapp0144.interpresales.mysoprahronline.com/GP4You/login -r report.html -I'
+                    sh 'sleep 10'
+                    sh 'docker cp owasp:/zap/wrk/report.html ${WORKSPACE}/report.html'
+                    
                 }
             }
         }
         
-        stage('Archive Report') {
-            steps {
-                archiveArtifacts artifacts: 'zap-report.html', allowEmptyArchive: true
-                publishHTML(target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: '',
-                    reportFiles: 'zap-report.html',
-                    reportName: 'OWASP ZAP Report'
-                ])
-            }
-        }
         
         stage('Run Tests on Edge') {
             steps {
