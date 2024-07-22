@@ -10,7 +10,6 @@ def pytest_addoption(parser):
 @pytest.fixture()
 def driver(request):
     browser = request.config.getoption("--browser")
-    zap_proxy = "http://owasp-zap:8082"  # Adresse du proxy OWASP ZAP
 
     if browser == "chrome":
         chrome_options = ChromeOptions()
@@ -18,7 +17,6 @@ def driver(request):
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--start-maximized")
-        chrome_options.add_argument(f"--proxy-server={zap_proxy}")
         my_driver = webdriver.Remote(
             command_executor="http://selenium-hub:4444/wd/hub",
             options=chrome_options
@@ -28,7 +26,6 @@ def driver(request):
         edge_options.use_chromium = True
         edge_options.add_argument("--inprivate")
         edge_options.add_argument("--start-maximized")
-        edge_options.add_argument(f"--proxy-server={zap_proxy}")
         my_driver = webdriver.Remote(
             command_executor="http://selenium-hub:4444/wd/hub",
             options=edge_options
@@ -37,7 +34,6 @@ def driver(request):
         firefox_options = FirefoxOptions()
         firefox_options.add_argument("--private-window")
         firefox_options.add_argument("--start-maximized")
-        firefox_options.add_argument(f"--proxy-server={zap_proxy}")
         my_driver = webdriver.Remote(
             command_executor="http://selenium-hub:4444/wd/hub",
             options=firefox_options
